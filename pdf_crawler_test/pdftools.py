@@ -1,4 +1,6 @@
 import logging
+import requests
+from url_normalize import url_normalize
 from pdfx import PDFx, extract_urls, PDFMinerBackend, \
     PDFSyntaxError, PDFInvalidError, TextBackend
 from models import Document, CrawledURL
@@ -45,8 +47,20 @@ def handle_pdf(name, data):
     logger.info("Created Document object with 'name' attribute: %s" % name)
 
     for url in urls:
-        u, created = CrawledURL.objects.get_or_create(url=url)
+        url = url_normalize(url)
+        u, created = CrawledURL.objects.get_or_create(url=url, alive=False)
         if created:
+            # Update alive status
+            try:
+                r = requests.head(url,timeout=1)
+                if r.status_code < 400:
+                    u.alive = True
+                    u.save()
+                    logger.info("URL: %s is alive" % url)
+                else:
+                    logger.info("URL: %s seems dead" % url)
+            except requests.ConnectionError:
+                logger.info("URL: %s seems dead" % url)
             logger.info("Created CrawledURL object for URL: %s" % url)
         document.urls.add(u)
         logger.info("CrawledURL object for URL %s linked to Document" % url)

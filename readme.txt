@@ -4,6 +4,8 @@ meaning that there may be documents with the same name or content
 but with different ID's.
 One could use hashes of the content if uniqueness check is needed.
 
+URL is alive if it returns 2XX or 3XX code.
+
 To check app `cd` into example folder where example Django project located.
 Setup project:
 

@@ -9,6 +9,7 @@ from model_utils.models import TimeStampedModel
 @python_2_unicode_compatible
 class CrawledURL(TimeStampedModel):
     url = models.URLField()
+    alive = models.BooleanField()
 
     @property
     def documents_count(self):
@@ -16,6 +17,7 @@ class CrawledURL(TimeStampedModel):
 
     def to_dict(self):
         return {'url': self.url,
+                'alive': self.alive,
                 'documents_count': self.documents_count}
 
     def __str__(self):
@@ -33,7 +35,7 @@ class Document(TimeStampedModel):
 
     @property
     def urls_list(self):
-        return list(self.urls.values_list('url', flat=True))
+        return list(self.urls.values_list('url','alive'))
 
     def to_dict(self):
         return {
