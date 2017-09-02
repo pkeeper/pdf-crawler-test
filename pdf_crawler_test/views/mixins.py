@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.db.models import Model
 
 
 class JSONResponseMixin(object):
@@ -24,4 +25,5 @@ class JSONResponseMixin(object):
         Returns an object that will be serialized as JSON by json.dumps().
         Transforms model instances to dicts.
         """
-        return [doc.to_dict() for doc in context['object_list']]
+        return [doc.to_dict() if isinstance(doc, Model) else doc \
+                for doc in context[self.context_object_name]]

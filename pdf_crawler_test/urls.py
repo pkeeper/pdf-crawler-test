@@ -18,7 +18,7 @@ urlpatterns = [
         name="List_Documents",
     ),
     url(
-        regex="^ListDocument_URLs/$",
+        regex="^ListDocument_URLs/(?P<pk>\d+)/$",
         view=views.ListDocumentURLs.as_view(),
         name="List_Document_URLs",
     ),

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic.list import BaseListView
+from django.views.generic.detail import BaseDetailView
 from .mixins import JSONResponseMixin
 from ..models import Document, CrawledURL
 from ..pdftools import handle_pdf
@@ -25,13 +26,14 @@ def pdf_upload(request):
 class ListDocuments(JSONResponseMixin, BaseListView):
     model = Document
 
+
+class ListDocumentURLs(JSONResponseMixin, BaseDetailView):
+    model = Document
+
     def get_context_data(self, **kwargs):
-        context = super(ListDocuments, self).get_context_data(**kwargs)
+        context = super(ListDocumentURLs, self).get_context_data(**kwargs)
+        context[self.context_object_name] = context[self.context_object_name].urls_list
         return context
-
-
-class ListDocumentURLs(JSONResponseMixin, BaseListView):
-    model = CrawledURL
 
 
 class ListURLs(JSONResponseMixin, BaseListView):

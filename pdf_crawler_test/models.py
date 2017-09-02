@@ -31,6 +31,10 @@ class Document(TimeStampedModel):
     def urls_count(self):
         return self.urls.all().count()
 
+    @property
+    def urls_list(self):
+        return list(self.urls.values_list('url', flat=True))
+
     def to_dict(self):
         return {
             'id': self.pk,
