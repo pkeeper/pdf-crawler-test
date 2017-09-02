@@ -17,3 +17,21 @@ Run project
 .manage.py runserver
 
 
+Usage
+
+Add some PDFs:
+http://127.0.0.1:8000/ProcessPDF/
+There's a simple form to upload a file.
+It can accept multiple files on POST (but no UI for that).
+If file is not a valid PDF it will return 400 code with error message, else "OK".
+
+List URLs that was detected in the PDF
+http://127.0.0.1:8000/ListDocument_URLs/<id>/
+Example:
+http://127.0.0.1:8000/ListDocument_URLs/1/
+
+List URLs
+http://127.0.0.1:8000/ListURLs/
+
+List Documents
+http://127.0.0.1:8000/ListDocuments/
