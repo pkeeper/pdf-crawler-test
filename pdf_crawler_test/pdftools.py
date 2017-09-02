@@ -1,6 +1,7 @@
 import logging
 from pdfx import PDFx, extract_urls, PDFMinerBackend, \
     PDFSyntaxError, PDFInvalidError, TextBackend
+from models import Document, CrawledURL
 
 
 logger = logging.getLogger()
@@ -41,7 +42,21 @@ class AdaptedPDFx (PDFx):
 
 def handle_pdf(name, data):
     # Read PDF and return URL's list
+    logger.info("Processing PDF with name: %s" % name)
     pdf = AdaptedPDFx(name, data)
-    print ("Metadata: ", pdf.get_metadata())
-    print ("references_list", pdf.get_references())
-    print ("references_dict", pdf.get_references_as_dict())
+    urls = pdf.get_references_as_dict().get('url', [])
+    logger.info("Metadata: %s" % pdf.get_metadata())
+    logger.info("URLs found: %s" % urls or "None")
+
+    logger.info("Saving to DB")
+    document = Document(name=name)
+    document.save()
+    logger.info("Created Document object with 'name' attribute: %s" % name)
+
+    for url in urls:
+        u, created = CrawledURL.objects.get_or_create(url=url)
+        if created:
+            logger.info("Created CrawledURL object for URL: %s" % url)
+        document.urls.add(u)
+        logger.info("CrawledURL object for URL %s linked to Document" % url)
+
