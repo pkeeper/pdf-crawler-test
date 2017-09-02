@@ -1,17 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
+from ..pdftools import handle_pdf
 
-
-def handle_pdf(pdf):
-    #(pdf.read())
-    print ("Got a File!")
 
 def pdf_upload(request):
     if request.method == 'POST' and request.FILES:
-        for pdf in request.FILES.values():
-            handle_pdf(pdf=pdf)
+        for filename, file in request.FILES.iteritems():
+            handle_pdf(name=request.FILES[filename].name,
+                       data=request.FILES[filename])
         return HttpResponse(status=200, content="OK")
     elif not request.FILES:
         pass
