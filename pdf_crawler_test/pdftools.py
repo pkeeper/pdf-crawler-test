@@ -4,7 +4,7 @@ from pdfx import PDFx, extract_urls, PDFMinerBackend, \
 from models import Document, CrawledURL
 
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 class AdaptedPDFx (PDFx):
     def __init__(self, name, stream):
@@ -19,16 +19,7 @@ class AdaptedPDFx (PDFx):
         try:
             self.reader = PDFMinerBackend(self.stream)
         except PDFSyntaxError as e:
-            # Could try to create a TextReader
-            try:
-                logger.info(unicode(e))
-                logger.info("Trying to create a TextReader backend...")
-                self.stream.seek(0)
-                self.reader = TextBackend(self.stream)
-                self.is_pdf = False
-            except Exception as e:
-                raise PDFInvalidError("Invalid PDF (%s)" % unicode(e))
-
+            raise PDFInvalidError("Error: invalid PDF (%s)" % unicode(e))
 
         # Save metadata to user-supplied directory
         self.summary = {

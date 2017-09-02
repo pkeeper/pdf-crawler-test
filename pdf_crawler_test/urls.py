@@ -6,10 +6,26 @@ from . import views
 
 urlpatterns = [
 
+    # Main API views
     url(
         regex="^ProcessPDF/$",
         view=views.pdf_upload,
         name="pdf_upload",
+    ),
+    url(
+        regex="^ListDocuments/$",
+        view=views.ListDocuments.as_view(),
+        name="List_Documents",
+    ),
+    url(
+        regex="^ListDocument_URLs/$",
+        view=views.ListDocumentURLs.as_view(),
+        name="List_Document_URLs",
+    ),
+    url(
+        regex="^ListURLs/$",
+        view=views.ListURLs.as_view(),
+        name="List_URLs",
     ),
 
     # Models management Views
@@ -38,7 +54,7 @@ urlpatterns = [
         view=views.CrawledURLListView.as_view(),
         name='CrawledURL_list',
     ),
-	url(
+    url(
         regex="^Document/~create/$",
         view=views.DocumentCreateView.as_view(),
         name='Document_create',
@@ -63,4 +79,4 @@ urlpatterns = [
         view=views.DocumentListView.as_view(),
         name='Document_list',
     ),
-	]
+    ]
