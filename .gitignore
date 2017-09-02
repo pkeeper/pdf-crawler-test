@@ -153,3 +153,4 @@ docs/_build
 .coveragerc
 .editorconfig
 .travis.yml
+*.sqlite3

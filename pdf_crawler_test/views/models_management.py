@@ -7,9 +7,9 @@ from django.views.generic import (
     ListView
 )
 
-from .models import (
-	CrawledURL,
-	Document,
+from ..models import (
+    CrawledURL,
+    Document,
 )
 
 

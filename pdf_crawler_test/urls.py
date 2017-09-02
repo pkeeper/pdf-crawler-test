@@ -5,6 +5,14 @@ from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
+
+    url(
+        regex="^ProcessPDF/$",
+        view=views.pdf_upload,
+        name="pdf_upload",
+    ),
+
+    # Models management Views
     url(
         regex="^CrawledURL/~create/$",
         view=views.CrawledURLCreateView.as_view(),
