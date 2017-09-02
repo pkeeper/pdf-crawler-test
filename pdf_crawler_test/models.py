@@ -10,6 +10,14 @@ from model_utils.models import TimeStampedModel
 class CrawledURL(TimeStampedModel):
     url = models.URLField()
 
+    @property
+    def documents_count(self):
+        return self.document_set.all().count()
+
+    def to_dict(self):
+        return {'url': self.url,
+                'documents_count': self.documents_count}
+
     def __str__(self):
         return "CrawledURL[%s]" % self.url
 
@@ -18,6 +26,17 @@ class CrawledURL(TimeStampedModel):
 class Document(TimeStampedModel):
     name = models.CharField(max_length=255)
     urls = models.ManyToManyField(CrawledURL)
+
+    @property
+    def urls_count(self):
+        return self.urls.all().count()
+
+    def to_dict(self):
+        return {
+            'id': self.pk,
+            'name': self.name,
+            'urls_count': self.urls_count
+        }
 
     def __str__(self):
         return "Document[%s]"% self.name
